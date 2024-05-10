@@ -1,0 +1,2927 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="1/22/2014 2:16:48 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName=""
+  DTS:CreatorName="Moiz Udaipurwala"
+  DTS:DTSID="{EAA0042B-3402-4EBB-A4F5-FCBFC10450AF}"
+  DTS:EnableConfig="True"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.166"
+  DTS:LocaleID="1033"
+  DTS:MaxConcurrentExecutables="1"
+  DTS:ObjectName="Custom StgToDW Billing ExtraData"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="499"
+  DTS:VersionGUID="{5D95ADC3-58B9-4A10-83A0-BCEF91D1F3F5}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[CONFIG]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{8ED98DED-E58D-4F16-B982-92D92ECFB16B}"
+      DTS:ObjectName="CONFIG">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Lawcover_Config;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Datawarehouse]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{270CBCA1-8FB9-4CDD-A75C-0389B26D939E}"
+      DTS:ObjectName="Datawarehouse">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Lawcover_Warehouse;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LOGGING]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{E0D701D9-BA26-48A0-992C-16EB83E25D22}"
+      DTS:ObjectName="LOGGING">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Lawcover_Warehouse;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Staging]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{682F6D0B-1D35-45CE-8E0D-4689BE8C68FD}"
+      DTS:ObjectName="Staging">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Lawcover_Staging_Billing;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Configurations>
+    <DTS:Configuration
+      DTS:ConfigurationString="#{deployPath}\#{Instance}\DuckCreek\Config\DW\ChildConfig.dtsConfig"
+      DTS:ConfigurationType="1"
+      DTS:CreationName=""
+      DTS:DTSID="{F723C15A-B8E7-406C-8259-BDB8FF762E8E}"
+      DTS:ObjectName="ChildConfig" />
+  </DTS:Configurations>
+  <DTS:LogProviders>
+    <DTS:LogProvider
+      DTS:ConfigString="LOGGING"
+      DTS:CreationName="Microsoft.LogProviderSQLServer"
+      DTS:Description="Writes log entries for events to a SQL Server database"
+      DTS:DTSID="{16EA7CDB-D8BB-4E97-A154-BB835412EB41}"
+      DTS:ObjectName="SSIS log provider for SQL Server">
+      <DTS:ObjectData>
+        <InnerObject />
+      </DTS:ObjectData>
+    </DTS:LogProvider>
+  </DTS:LogProviders>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{F5A5C570-AF76-41B3-8A47-2A9461EDE2E7}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="AutoAsOfDateInd">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{7F2D19C3-CA04-49B8-AB5A-C47C5D3ED78E}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="Yodil"
+      DTS:ObjectName="BatchId">
+      <DTS:VariableValue
+        DTS:DataType="14">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{E3D14C7D-C5E8-465D-A00F-DA9177C05275}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="Yodil"
+      DTS:ObjectName="Config_ConnectionString">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{49975834-03E9-4141-A1DE-8B363EBE7506}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="Yodil"
+      DTS:ObjectName="LineageId">
+      <DTS:VariableValue
+        DTS:DataType="14">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{44EC579E-A857-4302-8F40-B1FBA4BE5C5C}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="&quot;&lt;pair&gt;&lt;key&gt;table&lt;/key&gt;&lt;value&gt;Geography.Region&lt;/value&gt;&lt;/pair&gt;&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="Yodil"
+      DTS:ObjectName="LineageMeta">
+      <DTS:VariableValue
+        DTS:DataType="8">&lt;pair&gt;&lt;key&gt;table&lt;/key&gt;&lt;value&gt;Geography.Region&lt;/value&gt;&lt;/pair&gt;</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{D625C647-0F5B-4FF1-AA49-7B3352F4AD53}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="LoadDate">
+      <DTS:VariableValue
+        DTS:DataType="7">12:00:00 AM</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{E3DCEA7C-E529-4F4A-BFA8-4079D6CEFF3C}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="Yodil"
+      DTS:ObjectName="PackageId">
+      <DTS:VariableValue
+        DTS:DataType="14">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{03E0C231-D2CB-42DD-93AB-0B863D5C1233}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="Yodil"
+      DTS:ObjectName="SourceCode">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:LoggingOptions
+    DTS:FilterKind="0"
+    DTS:LoggingMode="1">
+    <DTS:Property
+      DTS:DataType="8"
+      DTS:Name="EventFilter">9,7,OnError,19,OnExecStatusChanged,13,OnPostExecute,14,OnPostValidate,12,OnPreExecute,13,OnPreValidate,13,OnQueryCancel,12,OnTaskFailed,9,OnWarning</DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnError"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnExecStatusChanged"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnPostExecute"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnPostValidate"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnPreExecute"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnPreValidate"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnQueryCancel"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnTaskFailed"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnWarning"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:SelectedLogProviders>
+      <DTS:SelectedLogProvider
+        DTS:InstanceID="{16EA7CDB-D8BB-4E97-A154-BB835412EB41}" />
+    </DTS:SelectedLogProviders>
+  </DTS:LoggingOptions>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\End"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{3FC98C12-3675-4C93-A508-7D990ACC0EB6}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="End">
+      <DTS:Variables />
+      <DTS:Executables />
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SEQC - DW AccountExtraData"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{6C6C99B8-50F9-45F8-8A14-04E0FA77F832}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SEQC - DW AccountExtraData">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0" />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{F042A436-6875-4996-94AD-75EFDDCD4CAF}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="DFT - DW- AccountExtraData"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:LoggingOptions
+            DTS:FilterKind="0" />
+          <DTS:ObjectData>
+            <pipeline
+              autoAdjustBufferSize="true"
+              version="1">
+              <components>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="DER - LoadDate"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Inputs[Derived Column Input].Columns[LoadDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LoadDate"
+                          cachedScale="7"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LoadDate]"
+                          truncationRowDisposition="FailComponent"
+                          usageType="readWrite">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[GETDATE]()</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">GETDATE()</property>
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Inputs[Derived Column Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account"
+                  componentClassID="Microsoft.Lookup"
+                  contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+                  description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+                  name="LKP - Billing Account"
+                  usesDispositions="true"
+                  version="6">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the SQL statement that generates the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT AccountId,BusinessKeyHash
+	,ContentHash 
+
+,StartDate
+
+,EndDate
+
+
+FROM [Billing].[Account]
+ with (nolock);</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommandParam"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (SELECT AccountId,BusinessKeyHash
+	,ContentHash 
+
+,StartDate
+
+,EndDate
+
+
+FROM [Billing].[Account]
+ with (nolock);) [refTable]
+where [refTable].[StartDate] = ? and [refTable].[BusinessKeyHash] = ?</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the type of connection used to access the reference dataset."
+                      name="ConnectionType"
+                      typeConverter="LookupConnectionType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the cache type of the lookup table."
+                      name="CacheType"
+                      typeConverter="CacheType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                      name="NoMatchBehavior"
+                      typeConverter="LookupNoMatchBehavior">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                      name="NoMatchCachePercentage">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                      name="MaxMemoryUsage">25</property>
+                    <property
+                      dataType="System.Int64"
+                      description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                      name="MaxMemoryUsage64">25</property>
+                    <property
+                      dataType="System.String"
+                      description="Indicates whether to reference metadata in an XML format."
+                      name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="AccountId" dataType="DT_I8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="BusinessKeyHash" dataType="DT_BYTES" length="32" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="ContentHash" dataType="DT_BYTES" length="32" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="StartDate" dataType="DT_DBTIMESTAMP2" length="0" precision="0" scale="7" codePage="0"/&gt;&lt;referenceColumn name="EndDate" dataType="DT_DBTIMESTAMP2" length="0" precision="0" scale="7" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                      name="ParameterMap">#{Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]};#{Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHash]};</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                      name="TreatDuplicateKeysAsError">false</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[Datawarehouse]"
+                      connectionManagerRefId="Package.ConnectionManagers[Datawarehouse]"
+                      description="Connection manager used to access lookup data."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Inputs[Lookup Input]"
+                      name="Lookup Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Inputs[Lookup Input].Columns[StartDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="StartDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table that a column joins."
+                              name="JoinToReferenceColumn">StartDate</property>
+                            <property
+                              dataType="System.Null"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn" />
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Inputs[Lookup Input].Columns[BusinessKeyHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHash]">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table that a column joins."
+                              name="JoinToReferenceColumn">BusinessKeyHash</property>
+                            <property
+                              dataType="System.Null"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn" />
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output]"
+                      errorOrTruncationOperation="Lookup"
+                      errorRowDisposition="FailComponent"
+                      exclusionGroup="1"
+                      name="Lookup Match Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Inputs[Lookup Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[EndDate]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Copy Column"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[EndDate]"
+                          name="EndDate"
+                          scale="7"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn">EndDate</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[AccountId]"
+                          dataType="i8"
+                          errorOrTruncationOperation="Copy Column"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[AccountId]"
+                          name="AccountId"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn">AccountId</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup No Match Output]"
+                      description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                      exclusionGroup="1"
+                      name="Lookup No Match Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Inputs[Lookup Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Lookup Error Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Inputs[Lookup Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId"
+                  componentClassID="Microsoft.Lookup"
+                  contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+                  description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+                  name="LKP - SourceSystemId"
+                  usesDispositions="true"
+                  version="6">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the SQL statement that generates the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">Select * from Control.SourceSystem with (nolock);</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                      expressionType="Notify"
+                      name="SqlCommandParam"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (Select * from Control.SourceSystem with (nolock);) [refTable]
+where [refTable].[BusinessKeyHash] = ?</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the type of connection used to access the reference dataset."
+                      name="ConnectionType"
+                      typeConverter="LookupConnectionType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the cache type of the lookup table."
+                      name="CacheType"
+                      typeConverter="CacheType">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                      name="NoMatchBehavior"
+                      typeConverter="LookupNoMatchBehavior">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                      name="NoMatchCachePercentage">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                      name="MaxMemoryUsage">25</property>
+                    <property
+                      dataType="System.Int64"
+                      description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                      name="MaxMemoryUsage64">25</property>
+                    <property
+                      dataType="System.String"
+                      description="Indicates whether to reference metadata in an XML format."
+                      name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="SourceSystemId" dataType="DT_I8" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="SourceSystemCode" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="SourceSystemDesc" dataType="DT_WSTR" length="100" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="BusinessKeyHash" dataType="DT_BYTES" length="32" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="ContentHash" dataType="DT_BYTES" length="32" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="StagingDBName" dataType="DT_WSTR" length="75" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="SourceSystemURL" dataType="DT_WSTR" length="500" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                      name="ParameterMap">#{Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHash]};</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                      name="TreatDuplicateKeysAsError">false</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[Datawarehouse]"
+                      connectionManagerRefId="Package.ConnectionManagers[Datawarehouse]"
+                      description="Connection manager used to access lookup data."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Inputs[Lookup Input]"
+                      name="Lookup Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Inputs[Lookup Input].Columns[BusinessKeyHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHash]">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table that a column joins."
+                              name="JoinToReferenceColumn">BusinessKeyHash</property>
+                            <property
+                              dataType="System.Null"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn" />
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Match Output]"
+                      errorOrTruncationOperation="Lookup"
+                      errorRowDisposition="IgnoreFailure"
+                      exclusionGroup="1"
+                      name="Lookup Match Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Inputs[Lookup Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Match Output].Columns[SourceSystemId]"
+                          dataType="i8"
+                          errorOrTruncationOperation="Copy Column"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Match Output].Columns[SourceSystemId]"
+                          name="SourceSystemId"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.String"
+                              description="Specifies the column in the reference table from which a column is copied."
+                              name="CopyFromReferenceColumn">SourceSystemId</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup No Match Output]"
+                      description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                      exclusionGroup="1"
+                      name="Lookup No Match Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Inputs[Lookup Input]">
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Lookup Error Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Inputs[Lookup Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="OLE DST - DW Temp AccountExtraData"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[Custom].[TempAccountExtraData]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[Datawarehouse]"
+                      connectionManagerRefId="Package.ConnectionManagers[Datawarehouse]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[EffectiveDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="EffectiveDate"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[EffectiveDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[EffectiveDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[ExpirationDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="ExpirationDate"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ExpirationDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ExpirationDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[StartDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="StartDate"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[ColumnName]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnName"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnName]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnName]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[ColumnValue]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnValue"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnValue]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnValue]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[LoadDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LoadDate"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LoadDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LoadDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[LineageId]"
+                          cachedDataType="i8"
+                          cachedName="LineageId"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LineageId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LineageId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[BatchId]"
+                          cachedDataType="i4"
+                          cachedName="BatchId"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[BatchId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[LastModifiedBatchId]"
+                          cachedDataType="i4"
+                          cachedName="LastModifiedBatchId"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LastModifiedBatchId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LastModifiedBatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[EndDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="EndDate"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[EndDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[EndDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[BusinessKeyHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[BusinessKeyHash]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[BusinessKeyHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[ContentHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="ContentHash"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ContentHash]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[ContentHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[AccountKey]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="AccountKey"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountKey]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountKey]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[AccountNumber]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="AccountNumber"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountNumber]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountNumber]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[DeletedInd]"
+                          cachedDataType="wstr"
+                          cachedLength="1"
+                          cachedName="DeletedInd"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[DeletedInd]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[DeletedInd]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[SourceSystemId]"
+                          cachedDataType="i8"
+                          cachedName="SourceSystemId"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[SourceSystemId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Match Output].Columns[SourceSystemId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].Columns[AccountId]"
+                          cachedDataType="i8"
+                          cachedName="AccountId"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[AccountId]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                          dataType="dbTimeStamp2"
+                          name="StartDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[BusinessKeyHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="BusinessKeyHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ContentHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="ContentHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[EffectiveDate]"
+                          dataType="dbTimeStamp2"
+                          name="EffectiveDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ExpirationDate]"
+                          dataType="dbTimeStamp2"
+                          name="ExpirationDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnName]"
+                          dataType="wstr"
+                          length="100"
+                          name="ColumnName" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnValue]"
+                          dataType="wstr"
+                          length="100"
+                          name="ColumnValue" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LoadDate]"
+                          dataType="dbTimeStamp2"
+                          name="LoadDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LineageId]"
+                          dataType="i8"
+                          name="LineageId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[EndDate]"
+                          dataType="dbTimeStamp2"
+                          name="EndDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[InternalDataId]"
+                          dataType="bytes"
+                          length="32"
+                          name="InternalDataId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[BatchId]"
+                          dataType="i8"
+                          name="BatchId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LastModifiedBatchId]"
+                          dataType="i8"
+                          name="LastModifiedBatchId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountId]"
+                          dataType="i8"
+                          name="AccountId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountKey]"
+                          dataType="wstr"
+                          length="100"
+                          name="AccountKey" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountNumber]"
+                          dataType="wstr"
+                          length="50"
+                          name="AccountNumber" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[DeletedInd]"
+                          dataType="wstr"
+                          length="1"
+                          name="DeletedInd" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[SourceSystemId]"
+                          dataType="i8"
+                          name="SourceSystemId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[Id]"
+                          dataType="i8"
+                          name="Id" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="OLE_SRC - Read Staging"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[Transactions].[BillingCollectionsAccount]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT    a.*
+,SourceSystemCodeForHash,[BatchId]
+,[LastModifiedBatchId]
+	 
+ 
+  FROM Custom.[AccountExtraData] a
+  
+      ,(select SourceSystemCode as SourceSystemCodeForHash, BatchId, [LastModifiedBatchId]=BatchId from control.SourceSystem) s</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[Staging]"
+                      connectionManagerRefId="Package.ConnectionManagers[Staging]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[EffectiveDate]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[EffectiveDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[EffectiveDate]"
+                          name="EffectiveDate"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ExpirationDate]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ExpirationDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ExpirationDate]"
+                          name="ExpirationDate"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LoadDate]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[LoadDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LoadDate]"
+                          name="LoadDate"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LineageId]"
+                          dataType="i8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[LineageId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LineageId]"
+                          name="LineageId"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[StartDate]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]"
+                          name="StartDate"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[SourceSystemCodeForHash]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[SourceSystemCodeForHash]"
+                          length="15"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[SourceSystemCodeForHash]"
+                          name="SourceSystemCodeForHash"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnName]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ColumnName]"
+                          length="100"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnName]"
+                          name="ColumnName"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnValue]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ColumnValue]"
+                          length="100"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnValue]"
+                          name="ColumnValue"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BusinessKeyHash]"
+                          dataType="bytes"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[BusinessKeyHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BusinessKeyHash]"
+                          name="BusinessKeyHash"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ContentHash]"
+                          dataType="bytes"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ContentHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ContentHash]"
+                          name="ContentHash"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BatchId]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[BatchId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BatchId]"
+                          name="BatchId"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LastModifiedBatchId]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[LastModifiedBatchId]"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LastModifiedBatchId]"
+                          name="LastModifiedBatchId"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountKey]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[AccountKey]"
+                          length="100"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountKey]"
+                          name="AccountKey"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountNumber]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[AccountNumber]"
+                          length="50"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountNumber]"
+                          name="AccountNumber"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[DeletedInd]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[DeletedInd]"
+                          length="1"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[DeletedInd]"
+                          name="DeletedInd"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[EffectiveDate]"
+                          dataType="dbTimeStamp2"
+                          name="EffectiveDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ExpirationDate]"
+                          dataType="dbTimeStamp2"
+                          name="ExpirationDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[LoadDate]"
+                          dataType="dbTimeStamp2"
+                          name="LoadDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[LineageId]"
+                          dataType="i8"
+                          name="LineageId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[StartDate]"
+                          dataType="dbTimeStamp2"
+                          name="StartDate"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[SourceSystemCodeForHash]"
+                          dataType="wstr"
+                          length="15"
+                          name="SourceSystemCodeForHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ColumnName]"
+                          dataType="wstr"
+                          length="100"
+                          name="ColumnName" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ColumnValue]"
+                          dataType="wstr"
+                          length="100"
+                          name="ColumnValue" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[BusinessKeyHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="BusinessKeyHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[ContentHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="ContentHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[BatchId]"
+                          dataType="i4"
+                          name="BatchId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[LastModifiedBatchId]"
+                          dataType="i4"
+                          name="LastModifiedBatchId" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[AccountKey]"
+                          dataType="wstr"
+                          length="100"
+                          name="AccountKey" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[AccountNumber]"
+                          dataType="wstr"
+                          length="50"
+                          name="AccountNumber" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].ExternalColumns[DeletedInd]"
+                          dataType="wstr"
+                          length="1"
+                          name="DeletedInd" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[AccountKey]"
+                          dataType="wstr"
+                          length="100"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[AccountKey]"
+                          name="AccountKey" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[AccountNumber]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[AccountNumber]"
+                          name="AccountNumber" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[EffectiveDate]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[EffectiveDate]"
+                          name="EffectiveDate"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ExpirationDate]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ExpirationDate]"
+                          name="ExpirationDate"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[LoadDate]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[LoadDate]"
+                          name="LoadDate"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[DeletedInd]"
+                          dataType="wstr"
+                          length="1"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[DeletedInd]"
+                          name="DeletedInd" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[LineageId]"
+                          dataType="i8"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[LineageId]"
+                          name="LineageId" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[StartDate]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[StartDate]"
+                          name="StartDate"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[SourceSystemCodeForHash]"
+                          dataType="wstr"
+                          length="15"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[SourceSystemCodeForHash]"
+                          name="SourceSystemCodeForHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ColumnName]"
+                          dataType="wstr"
+                          length="100"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ColumnName]"
+                          name="ColumnName" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ColumnValue]"
+                          dataType="wstr"
+                          length="100"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ColumnValue]"
+                          name="ColumnValue" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[BatchId]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[BatchId]"
+                          name="BatchId" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[LastModifiedBatchId]"
+                          dataType="i4"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[LastModifiedBatchId]"
+                          name="LastModifiedBatchId" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[BusinessKeyHash]"
+                          dataType="bytes"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[BusinessKeyHash]"
+                          name="BusinessKeyHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ContentHash]"
+                          dataType="bytes"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Error Output].Columns[ContentHash]"
+                          name="ContentHash" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash"
+                  componentClassID="Microsoft.ManagedComponentHost"
+                  name="YHC - BillingAccount hash"
+                  validateExternalMetadata="False"
+                  version="3">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Hash fields in XML format."
+                      name="HashFields">&lt;?xml version="1.0" encoding="utf-16" standalone="yes"?&gt;&lt;fields&gt;&lt;field include-content="False" include-key="True" name="SourceSystemCodeForHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="EffectiveDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ExpirationDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BusinessKeyHashInput" upstream="YHC - TerminationReasonKey Hash" /&gt;&lt;field include-content="False" include-key="False" name="SourceSystemId" upstream="Lookup" /&gt;&lt;field include-content="False" include-key="False" name="LoadDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LineageId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="True" include-key="False" name="StartDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BusinessKeyHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ContentHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ColumnName" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ColumnValue" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BatchId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LastModifiedBatchId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="True" name="AccountKey" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="AccountNumber" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="DeletedInd" upstream="OLE_SRC - Read Staging" /&gt;&lt;/fields&gt;</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Generate case-sensitive hash."
+                      name="CaseSensitive">false</property>
+                    <property
+                      dataType="System.String"
+                      name="UserComponentTypeName">Yodil.Comp.Hash, Yodil.Comp.Hash, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b18d8a0ed6af6426</property>
+                  </properties>
+                  <inputs>
+                    <input
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input]"
+                      name="Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[EffectiveDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="EffectiveDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[EffectiveDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[ExpirationDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="ExpirationDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ExpirationDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[LoadDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LoadDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LoadDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[LineageId]"
+                          cachedDataType="i8"
+                          cachedName="LineageId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LineageId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[StartDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="StartDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[SourceSystemCodeForHash]"
+                          cachedDataType="wstr"
+                          cachedLength="15"
+                          cachedName="SourceSystemCodeForHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[SourceSystemCodeForHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[ColumnName]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnName"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnName]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[ColumnValue]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnValue"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnValue]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[BusinessKeyHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BusinessKeyHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[ContentHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="ContentHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ContentHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[BatchId]"
+                          cachedDataType="i4"
+                          cachedName="BatchId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[LastModifiedBatchId]"
+                          cachedDataType="i4"
+                          cachedName="LastModifiedBatchId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LastModifiedBatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[ContentHash1]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="ContentHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[ContentHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[BusinessKeyHash1]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[BusinessKeyHashInput]"
+                          cachedDataType="wstr"
+                          cachedLength="800"
+                          cachedName="BusinessKeyHashInput"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHashInput]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[SourceSystemId]"
+                          cachedDataType="i8"
+                          cachedName="SourceSystemId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Match Output].Columns[SourceSystemId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[AccountKey]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="AccountKey"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountKey]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[AccountNumber]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="AccountNumber"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountNumber]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input].Columns[DeletedInd]"
+                          cachedDataType="wstr"
+                          cachedLength="1"
+                          cachedName="DeletedInd"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[DeletedInd]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output]"
+                      name="Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[ContentHash]"
+                          dataType="bytes"
+                          description="Contains calculated hash code for content."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].ExternalColumns[ContentHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[ContentHash]"
+                          name="ContentHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHash]"
+                          dataType="bytes"
+                          description="Contains calculated hash code for business key."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].ExternalColumns[BusinessKeyHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHash]"
+                          name="BusinessKeyHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHashInput]"
+                          dataType="wstr"
+                          description="Contains data used for calculating business key hash code."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].ExternalColumns[BusinessKeyHashInput]"
+                          length="800"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHashInput]"
+                          name="BusinessKeyHashInput" />
+                      </outputColumns>
+                      <externalMetadataColumns>
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].ExternalColumns[ContentHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="ContentHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].ExternalColumns[BusinessKeyHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="BusinessKeyHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].ExternalColumns[BusinessKeyHashInput]"
+                          dataType="wstr"
+                          length="800"
+                          name="BusinessKeyHashInput" />
+                      </externalMetadataColumns>
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash"
+                  componentClassID="Microsoft.ManagedComponentHost"
+                  name="YHC - SourceSystemHash"
+                  validateExternalMetadata="False"
+                  version="3">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Hash fields in XML format."
+                      name="HashFields">&lt;?xml version="1.0" encoding="utf-16" standalone="yes"?&gt;&lt;fields&gt;&lt;field include-content="False" include-key="True" name="SourceSystemCodeForHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="EffectiveDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ExpirationDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LoadDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LineageId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="StartDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BusinessKeyHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ContentHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ColumnName" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ColumnValue" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BatchId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LastModifiedBatchId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="AccountKey" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="AccountNumber" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="DeletedInd" upstream="OLE_SRC - Read Staging" /&gt;&lt;/fields&gt;</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Generate case-sensitive hash."
+                      name="CaseSensitive">false</property>
+                    <property
+                      dataType="System.String"
+                      name="UserComponentTypeName">Yodil.Comp.Hash, Yodil.Comp.Hash, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b18d8a0ed6af6426</property>
+                  </properties>
+                  <inputs>
+                    <input
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input]"
+                      name="Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[EffectiveDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="EffectiveDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[EffectiveDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[ExpirationDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="ExpirationDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ExpirationDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[LoadDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LoadDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LoadDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[LineageId]"
+                          cachedDataType="i8"
+                          cachedName="LineageId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LineageId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[StartDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="StartDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[SourceSystemCodeForHash]"
+                          cachedDataType="wstr"
+                          cachedLength="15"
+                          cachedName="SourceSystemCodeForHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[SourceSystemCodeForHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[ColumnName]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnName"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnName]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[ColumnValue]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnValue"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnValue]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[BusinessKeyHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BusinessKeyHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[ContentHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="ContentHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ContentHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[BatchId]"
+                          cachedDataType="i4"
+                          cachedName="BatchId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[LastModifiedBatchId]"
+                          cachedDataType="i4"
+                          cachedName="LastModifiedBatchId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LastModifiedBatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[AccountKey]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="AccountKey"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountKey]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[AccountNumber]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="AccountNumber"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountNumber]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input].Columns[DeletedInd]"
+                          cachedDataType="wstr"
+                          cachedLength="1"
+                          cachedName="DeletedInd"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[DeletedInd]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output]"
+                      name="Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[ContentHash]"
+                          dataType="bytes"
+                          description="Contains calculated hash code for content."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].ExternalColumns[ContentHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[ContentHash]"
+                          name="ContentHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHash]"
+                          dataType="bytes"
+                          description="Contains calculated hash code for business key."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].ExternalColumns[BusinessKeyHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHash]"
+                          name="BusinessKeyHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHashInput]"
+                          dataType="wstr"
+                          description="Contains data used for calculating business key hash code."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].ExternalColumns[BusinessKeyHashInput]"
+                          length="800"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHashInput]"
+                          name="BusinessKeyHashInput" />
+                      </outputColumns>
+                      <externalMetadataColumns>
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].ExternalColumns[ContentHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="ContentHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].ExternalColumns[BusinessKeyHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="BusinessKeyHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].ExternalColumns[BusinessKeyHashInput]"
+                          dataType="wstr"
+                          length="800"
+                          name="BusinessKeyHashInput" />
+                      </externalMetadataColumns>
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes"
+                  componentClassID="Microsoft.ManagedComponentHost"
+                  name="YHC - This Table Hashes"
+                  validateExternalMetadata="False"
+                  version="3">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="Hash fields in XML format."
+                      name="HashFields">&lt;?xml version="1.0" encoding="utf-16" standalone="yes"?&gt;&lt;fields&gt;&lt;field include-content="True" include-key="False" name="EffectiveDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="True" include-key="False" name="ExpirationDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LoadDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LineageId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="True" include-key="False" name="StartDate" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="True" name="SourceSystemCodeForHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="True" name="ColumnName" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="True" include-key="False" name="ColumnValue" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BusinessKeyHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="ContentHash" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BatchId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="LastModifiedBatchId" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="BusinessKeyHashInput" upstream="YHC - SourceSystemHash" /&gt;&lt;field include-content="False" include-key="False" name="SourceSystemId" upstream="LKP - SourceSystemId" /&gt;&lt;field include-content="False" include-key="False" name="EndDate" upstream="LKP - InsuredObject" /&gt;&lt;field include-content="False" include-key="True" name="AccountKey" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="AccountNumber" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="False" include-key="False" name="DeletedInd" upstream="OLE_SRC - Read Staging" /&gt;&lt;field include-content="True" include-key="False" name="AccountId" upstream="LKP - InsuredObject" /&gt;&lt;/fields&gt;</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Generate case-sensitive hash."
+                      name="CaseSensitive">false</property>
+                    <property
+                      dataType="System.String"
+                      name="UserComponentTypeName">Yodil.Comp.Hash, Yodil.Comp.Hash, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b18d8a0ed6af6426</property>
+                  </properties>
+                  <inputs>
+                    <input
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input]"
+                      name="Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[EffectiveDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="EffectiveDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[EffectiveDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[ExpirationDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="ExpirationDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ExpirationDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[LoadDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LoadDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LoadDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[LineageId]"
+                          cachedDataType="i8"
+                          cachedName="LineageId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LineageId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[StartDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="StartDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[StartDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[SourceSystemCodeForHash]"
+                          cachedDataType="wstr"
+                          cachedLength="15"
+                          cachedName="SourceSystemCodeForHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[SourceSystemCodeForHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[ColumnName]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnName"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnName]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[ColumnValue]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="ColumnValue"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ColumnValue]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[BusinessKeyHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BusinessKeyHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[ContentHash]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="ContentHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[ContentHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[BatchId]"
+                          cachedDataType="i4"
+                          cachedName="BatchId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[BatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[LastModifiedBatchId]"
+                          cachedDataType="i4"
+                          cachedName="LastModifiedBatchId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[LastModifiedBatchId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[ContentHash1]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="ContentHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[ContentHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[BusinessKeyHash1]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[BusinessKeyHashInput]"
+                          cachedDataType="wstr"
+                          cachedLength="800"
+                          cachedName="BusinessKeyHashInput"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output].Columns[BusinessKeyHashInput]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[SourceSystemId]"
+                          cachedDataType="i8"
+                          cachedName="SourceSystemId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Match Output].Columns[SourceSystemId]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[ContentHash2]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="ContentHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[ContentHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[BusinessKeyHash2]"
+                          cachedDataType="bytes"
+                          cachedLength="32"
+                          cachedName="BusinessKeyHash"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHash]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[BusinessKeyHashInput1]"
+                          cachedDataType="wstr"
+                          cachedLength="800"
+                          cachedName="BusinessKeyHashInput"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output].Columns[BusinessKeyHashInput]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[EndDate]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="EndDate"
+                          cachedScale="7"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[EndDate]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[AccountKey]"
+                          cachedDataType="wstr"
+                          cachedLength="100"
+                          cachedName="AccountKey"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountKey]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[AccountNumber]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="AccountNumber"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[AccountNumber]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[DeletedInd]"
+                          cachedDataType="wstr"
+                          cachedLength="1"
+                          cachedName="DeletedInd"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output].Columns[DeletedInd]" />
+                        <inputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input].Columns[AccountId]"
+                          cachedDataType="i8"
+                          cachedName="AccountId"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output].Columns[AccountId]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output]"
+                      name="Output"
+                      synchronousInputId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[ContentHash]"
+                          dataType="bytes"
+                          description="Contains calculated hash code for content."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].ExternalColumns[ContentHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[ContentHash]"
+                          name="ContentHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[BusinessKeyHash]"
+                          dataType="bytes"
+                          description="Contains calculated hash code for business key."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].ExternalColumns[BusinessKeyHash]"
+                          length="32"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[BusinessKeyHash]"
+                          name="BusinessKeyHash" />
+                        <outputColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[BusinessKeyHashInput]"
+                          dataType="wstr"
+                          description="Contains data used for calculating business key hash code."
+                          externalMetadataColumnId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].ExternalColumns[BusinessKeyHashInput]"
+                          length="800"
+                          lineageId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].Columns[BusinessKeyHashInput]"
+                          name="BusinessKeyHashInput" />
+                      </outputColumns>
+                      <externalMetadataColumns>
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].ExternalColumns[ContentHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="ContentHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].ExternalColumns[BusinessKeyHash]"
+                          dataType="bytes"
+                          length="32"
+                          name="BusinessKeyHash" />
+                        <externalMetadataColumn
+                          refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output].ExternalColumns[BusinessKeyHashInput]"
+                          dataType="wstr"
+                          length="800"
+                          name="BusinessKeyHashInput" />
+                      </externalMetadataColumns>
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Derived Column Output]"
+                  endId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Inputs[Input]"
+                  name="Derived Column Output"
+                  startId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Outputs[Derived Column Output]" />
+                <path
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Lookup Match Output]"
+                  endId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate.Inputs[Derived Column Input]"
+                  name="Lookup Match Output"
+                  startId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Outputs[Lookup Match Output]" />
+                <path
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Lookup Match Output1]"
+                  endId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Inputs[Input]"
+                  name="Lookup Match Output"
+                  startId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Outputs[Lookup Match Output]" />
+                <path
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[OLE DB Source Output]"
+                  endId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Inputs[Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging.Outputs[OLE DB Source Output]" />
+                <path
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Output]"
+                  endId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId.Inputs[Lookup Input]"
+                  name="Output"
+                  startId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash.Outputs[Output]" />
+                <path
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Output1]"
+                  endId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account.Inputs[Lookup Input]"
+                  name="Output"
+                  startId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash.Outputs[Output]" />
+                <path
+                  refId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Output2]"
+                  endId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData.Inputs[OLE DB Destination Input]"
+                  name="Output"
+                  startId="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes.Outputs[Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\SEQC - DW AccountExtraData\SQL Insert New Records"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{A9BC65BE-B9B6-4268-8C68-4EEB6E18794C}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="SQL Insert New Records"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{270CBCA1-8FB9-4CDD-A75C-0389B26D939E}"
+              SQLTask:SqlStatementSource="INSERT into Custom.[AccountExtraData] (&#xA;       a.[AccountId]&#xA;      ,[AccountKey]&#xA;&#x9;  ,[AccountNumber]&#xA;      ,[StartDate]&#xA;      ,[ColumnName]&#xA;      ,[ColumnValue]&#xA;      ,[EffectiveDate]&#xA;      ,[ExpirationDate]&#xA;      ,[LoadDate]&#xA;      ,[LineageId]&#xA;      ,[BusinessKeyHash]&#xA;      ,[ContentHash]&#xA;      ,[EndDate]&#xA;      ,[InternalDataId]&#xA;      ,[BatchId]&#xA;      ,[LastModifiedBatchId]&#xA;&#x9;  ,[SourceSystemId]&#xA; &#xA;&#xA;      )&#xA;select&#xA;     a.[AccountId]&#xA;      ,a.[AccountKey]&#xA;&#x9;  ,a.[AccountNumber]&#xA;      ,a.[StartDate]&#xA;      ,a.[ColumnName]&#xA;      ,a.[ColumnValue]&#xA;      ,a.[EffectiveDate]&#xA;      ,a.[ExpirationDate]&#xA;      ,a.[LoadDate]&#xA;      ,a.[LineageId]&#xA;      ,a.[BusinessKeyHash]&#xA;      ,a.[ContentHash]&#xA;      ,a.[EndDate]&#xA;      ,a.[InternalDataId]&#xA;      ,a.[BatchId]&#xA;      ,a.[LastModifiedBatchId]&#xA;&#x9;  ,a.SourceSystemId&#xA;&#xA;&#xA;from Custom.TempAccountExtraData a --#InsuredObjectExtraDataTemp a&#xA;&#x9;left join  Custom.[AccountExtraData] b&#xA;&#x9;&#x9;on a.businesskeyhash = b.BusinessKeyHash&#xA;&#x9;&#x9;and a.startdate = b.StartDate&#xA;where&#xA;&#x9;b.BusinessKeyHash is null&#xA;&#x9;and b.StartDate is null&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\SEQC - DW AccountExtraData\SQL Update EndDate"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{fe9cf966-95bb-4475-be62-829cb27bebba}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="SQL Update EndDate"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:LoggingOptions
+            DTS:FilterKind="0" />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{270CBCA1-8FB9-4CDD-A75C-0389B26D939E}"
+              SQLTask:SqlStatementSource="    &#xA;Update Custom.AccountExtraData&#xA;set EndDate = Enddate_UPD&#xA;--select *&#xA;from Custom.AccountExtraData&#xA;, (&#xA;&#xA;SELECT  [BusinessKeyHash]      &#xA;     &#xA;   ,startdate&#xA;&#xA;,EndDate_UPD=ISNULL(MAX(startdate) OVER (PARTITION BY BusinessKeyHash  &#xA;ORDER BY startdate ROWS BETWEEN 1 FOLLOWING AND 1 FOLLOWING),d.defaultdate)&#xA;     FROM Custom.AccountExtraData&#xA;  ,Control.DefaultDate d&#xA;   -- where enddate = d.DefaultDate or enddate is null&#xA;  )&#xA;  U&#xA;  where Custom.AccountExtraData.[BusinessKeyHash]= U.[BusinessKeyHash]&#xA;  and  Custom.AccountExtraData.startdate= U.startdate&#xA;  ;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\SEQC - DW AccountExtraData.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{D1A4FFA5-6D4E-417F-AAED-F406C9A9943E}"
+          DTS:From="Package\SEQC - DW AccountExtraData\SQL Insert New Records"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\SEQC - DW AccountExtraData\SQL Update EndDate" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\SEQC - DW AccountExtraData.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{071BF203-3FD1-4D54-9A8A-FD4F0A2ED0C4}"
+          DTS:From="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\SEQC - DW AccountExtraData\SQL Insert New Records" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SEQC - DW Other Additonal ExtraData table 1"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{BC238370-858B-4E27-A448-D7E2734036BF}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SEQC - DW Other Additonal ExtraData table 1">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0" />
+      <DTS:Executables />
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SEQC - DW Other Additonal ExtraData table 2"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{470A2B36-0F2C-4B91-B1EE-50D4F371D9D8}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SEQC - DW Other Additonal ExtraData table 2">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0" />
+      <DTS:Executables />
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SQL - Set TypeOfProcessInd"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{76EE5FBE-F9C8-40F9-8955-8FDE0BE89EEE}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SQL - Set TypeOfProcessInd"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{682F6D0B-1D35-45CE-8E0D-4689BE8C68FD}"
+          SQLTask:SqlStatementSource="Select AutoAsOfDateInd From [Control].[SourceSystem]"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="0"
+            SQLTask:DtsVariableName="User::AutoAsOfDateInd" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SQL Truncate all temp tables for Billing extra data"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{A4ADDDF5-AC8B-4774-9BEE-FCDA1C5082F0}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SQL Truncate all temp tables for Billing extra data"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{270CBCA1-8FB9-4CDD-A75C-0389B26D939E}"
+          SQLTask:SqlStatementSource="  Truncate table Custom.[TempAccountExtraData];&#xA;--Add Truncate statements here for additional custom tables" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{62A77C64-12B8-4727-9847-829793E4429E}"
+      DTS:From="Package\SQL - Set TypeOfProcessInd"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\SEQC - DW AccountExtraData" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{A589FFD6-E2B4-4CCE-92C3-E513E1ED63D8}"
+      DTS:From="Package\SQL - Set TypeOfProcessInd"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\SEQC - DW Other Additonal ExtraData table 1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{307FC31F-965E-4337-B541-1C5C4A0BB411}"
+      DTS:From="Package\SQL - Set TypeOfProcessInd"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\SEQC - DW Other Additonal ExtraData table 2" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{8616DED4-5325-4E5D-8A7E-EE4348A25791}"
+      DTS:From="Package\SQL Truncate all temp tables for Billing extra data"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\SQL - Set TypeOfProcessInd" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{025B5F49-EFC1-4EC7-B487-9E33C65DE3F1}"
+      DTS:From="Package\SEQC - DW AccountExtraData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\End" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{2FFB9AC8-435B-426E-8D44-13170E1467D7}"
+      DTS:From="Package\SEQC - DW Other Additonal ExtraData table 1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\End" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
+      DTS:CreationName=""
+      DTS:DTSID="{C2CEF8EE-7047-47F4-86CB-705F6A614851}"
+      DTS:From="Package\SEQC - DW Other Additonal ExtraData table 2"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 6"
+      DTS:To="Package\End" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="215.2,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData"
+          TopLeft="5.50000000000001,5.50000000000007" />
+        <NodeLayout
+          Size="192.8,41.6"
+          Id="Package\SEQC - DW AccountExtraData\SQL Insert New Records"
+          TopLeft="16.7,107.1" />
+        <NodeLayout
+          Size="178.4,41.6"
+          Id="Package\SEQC - DW AccountExtraData\SQL Update EndDate"
+          TopLeft="23.9,208.7" />
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData.PrecedenceConstraints[Constraint]"
+          TopLeft="113.1,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData.PrecedenceConstraints[Constraint 1]"
+          TopLeft="113.1,47.1000000000001">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="226.4,305.6"
+          Size="226.4,348.8"
+          Id="Package\SEQC - DW AccountExtraData"
+          TopLeft="5.50000000000004,208.7" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="204.8,55.2"
+          Size="204.8,98.4"
+          Id="Package\SEQC - DW Other Additonal ExtraData table 1"
+          TopLeft="292.3,333.9" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="204.8,55.2"
+          Size="204.8,98.4"
+          Id="Package\SEQC - DW Other Additonal ExtraData table 2"
+          TopLeft="557.3,333.9" />
+        <NodeLayout
+          Size="212,41.6"
+          Id="Package\SQL - Set TypeOfProcessInd"
+          TopLeft="288.7,107.1" />
+        <NodeLayout
+          Size="307.2,41.6"
+          Id="Package\SQL Truncate all temp tables for Billing extra data"
+          TopLeft="241.1,5.49999999999995" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="343.7,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-225,60"
+              Start="0,0"
+              End="-225,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.4968944099379" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.4968944099379"
+                    Point2="0,20.4968944099379"
+                    Point3="-4,20.4968944099379" />
+                  <mssgle:LineSegment
+                    End="-221,20.4968944099379" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-221,20.4968944099379"
+                    Point2="-225,20.4968944099379"
+                    Point3="-225,24.4968944099379" />
+                  <mssgle:LineSegment
+                    End="-225,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="394.7,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,185.2"
+              Start="0,0"
+              End="0,177.7">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,177.7" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="445.7,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="214,185.2"
+              Start="0,0"
+              End="214,177.7">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,59.2670807453416" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,59.2670807453416"
+                    Point2="0,63.2670807453416"
+                    Point3="4,63.2670807453416" />
+                  <mssgle:LineSegment
+                    End="210,63.2670807453416" />
+                  <mssgle:CubicBezierSegment
+                    Point1="210,63.2670807453416"
+                    Point2="214,63.2670807453416"
+                    Point3="214,67.2670807453416" />
+                  <mssgle:LineSegment
+                    End="214,177.7" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="394.7,47.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="204.8,55.2"
+          Size="204.8,98.4"
+          Id="Package\End"
+          TopLeft="395.83331760433,615.466671322716" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="118.7,557.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="330.33331760433,57.9666713227165"
+              Start="0,0"
+              End="330.33331760433,50.4666713227165">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.1477322843584" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,34.1477322843584"
+                    Point2="0,38.1477322843584"
+                    Point3="4,38.1477322843584" />
+                  <mssgle:LineSegment
+                    End="326.33331760433,38.1477322843584" />
+                  <mssgle:CubicBezierSegment
+                    Point1="326.33331760433,38.1477322843584"
+                    Point2="330.33331760433,38.1477322843584"
+                    Point3="330.33331760433,42.1477322843584" />
+                  <mssgle:LineSegment
+                    End="330.33331760433,50.4666713227165" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="394.7,432.3">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="103.53331760433,183.166671322717"
+              Start="0,0"
+              End="103.53331760433,175.666671322717">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,87.5833356613583" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,87.5833356613583"
+                    Point2="0,91.5833356613583"
+                    Point3="4,91.5833356613583" />
+                  <mssgle:LineSegment
+                    End="99.5333176043304,91.5833356613583" />
+                  <mssgle:CubicBezierSegment
+                    Point1="99.5333176043304,91.5833356613583"
+                    Point2="103.53331760433,91.5833356613583"
+                    Point3="103.53331760433,95.5833356613583" />
+                  <mssgle:LineSegment
+                    End="103.53331760433,175.666671322717" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="659.7,432.3">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-112.266682395669,183.166671322717"
+              Start="0,0"
+              End="-112.266682395669,175.666671322717">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,116.541562618549" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,116.541562618549"
+                    Point2="0,120.541562618549"
+                    Point3="-4,120.541562618549" />
+                  <mssgle:LineSegment
+                    End="-108.266682395669,120.541562618549" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-108.266682395669,120.541562618549"
+                    Point2="-112.266682395669,120.541562618549"
+                    Point3="-112.266682395669,124.541562618549" />
+                  <mssgle:LineSegment
+                    End="-112.266682395669,175.666671322717" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="193.6,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - This Table Hashes"
+          TopLeft="55.1000000000001,615.099999999999" />
+        <NodeLayout
+          Size="264.8,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData"
+          TopLeft="5.50000000000009,716.699999999999" />
+        <NodeLayout
+          Size="175.2,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account"
+          TopLeft="65.9,411.9" />
+        <NodeLayout
+          Size="200,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - BillingAccount hash"
+          TopLeft="51.9,310.3" />
+        <NodeLayout
+          Size="184.8,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId"
+          TopLeft="59.9,208.7" />
+        <NodeLayout
+          Size="200.8,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\YHC - SourceSystemHash"
+          TopLeft="51.9,107.1" />
+        <NodeLayout
+          Size="153.6,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\DER - LoadDate"
+          TopLeft="75.5000000000001,513.5" />
+        <NodeLayout
+          Size="195.2,41.6"
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging"
+          TopLeft="54.7,5.49999999999995" />
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Output2]"
+          TopLeft="151.9,656.699999999999">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-14,60"
+              Start="0,0"
+              End="-14,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26"
+                    Point2="0,30"
+                    Point3="-4,30" />
+                  <mssgle:LineSegment
+                    End="-10,30" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-10,30"
+                    Point2="-14,30"
+                    Point3="-14,34" />
+                  <mssgle:LineSegment
+                    End="-14,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Output1]"
+          TopLeft="152.7,351.9">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Output]"
+          TopLeft="152.3,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[OLE DB Source Output]"
+          TopLeft="152.3,47.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Lookup Match Output1]"
+          TopLeft="152.1,250.3">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-48.19138671875,20.4453125,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Lookup Match Output]"
+          TopLeft="152.9,453.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-48.19138671875,20.4453125,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData.Paths[Derived Column Output]"
+          TopLeft="152.3,555.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE DST - DW Temp AccountExtraData">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - Billing Account">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string"></Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\LKP - SourceSystemId">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string"></Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\SEQC - DW AccountExtraData\DFT - DW- AccountExtraData\OLE_SRC - Read Staging">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

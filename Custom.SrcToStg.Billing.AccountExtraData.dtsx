@@ -1,0 +1,2243 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="1/27/2014 11:49:13 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName=""
+  DTS:CreatorName="Moiz Udaipurwala"
+  DTS:DelayValidation="True"
+  DTS:DTSID="{2912C4A3-82BE-47E3-B51A-DB6C65886681}"
+  DTS:EnableConfig="True"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1301.433"
+  DTS:LocaleID="16393"
+  DTS:ObjectName="Custom SrcToStg Billing Account ExtraData"
+  DTS:PackageType="5"
+  DTS:VersionBuild="412"
+  DTS:VersionGUID="{11A516ED-8C40-48AF-970C-785DD2C801F6}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Config]"
+      DTS:CreationName="OLEDB"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{7A89E44C-1FEF-4162-8716-B94798BB0715}"
+      DTS:ObjectName="Config">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::V_ConfigDataSource]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=.;Initial Catalog=;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SourceBill]"
+      DTS:CreationName="OLEDB"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{B70033A5-3D77-4948-BC1F-7041701A5D03}"
+      DTS:ObjectName="SourceBill">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::V_SourceBill]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Lawcover_DuckCreek_Consolidated;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SourceLookupBill]"
+      DTS:CreationName="OLEDB"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{37C3077D-3A2C-49BA-8614-BF8DC0E8B9F0}"
+      DTS:ObjectName="SourceLookupBill">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::V_SourceLookupBill]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Lawcover_DuckCreek_Consolidated;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[StageBilling]"
+      DTS:CreationName="OLEDB"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{EA2670E3-7B9D-449B-B7EF-73338DF7FA74}"
+      DTS:ObjectName="StageBilling">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::V_Target]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Lawcover_Staging_Billing;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Configurations>
+    <DTS:Configuration
+      DTS:ConfigurationString="LineageId"
+      DTS:ConfigurationVariable="\Package.Variables[User::LineageId].Properties[Value]"
+      DTS:CreationName=""
+      DTS:DTSID="{119F0D11-56AB-4A8A-B5D2-9757CF3E6D3E}"
+      DTS:ObjectName="LineageId" />
+    <DTS:Configuration
+      DTS:ConfigurationString="BatchId"
+      DTS:ConfigurationVariable="\Package.Variables[User::BatchId].Properties[Value]"
+      DTS:CreationName=""
+      DTS:DTSID="{2FBB5D5A-9A7B-43A6-A17A-FD0545BE81F5}"
+      DTS:ObjectName="BatchId" />
+    <DTS:Configuration
+      DTS:ConfigurationString="SourceCode"
+      DTS:ConfigurationVariable="\Package.Variables[User::SourceCode].Properties[Value]"
+      DTS:CreationName=""
+      DTS:DTSID="{A84C58BE-3BD1-4518-B160-9A3797010AFF}"
+      DTS:ObjectName="SourceCode" />
+    <DTS:Configuration
+      DTS:ConfigurationString="V_CultureCode"
+      DTS:ConfigurationVariable="\Package.Variables[User::V_CultureCode].Properties[Value]"
+      DTS:CreationName=""
+      DTS:DTSID="{0CF5580C-4251-4387-92EC-F527D0863F43}"
+      DTS:ObjectName="CultureCode" />
+    <DTS:Configuration
+      DTS:ConfigurationString="V_ConfigDataSource"
+      DTS:ConfigurationVariable="\Package.Variables[User::V_ConfigDataSource].Properties[Value]"
+      DTS:CreationName=""
+      DTS:DTSID="{7A39FC61-B28A-4A11-B8B6-64721974FE32}"
+      DTS:ObjectName="ConfigDataSource" />
+  </DTS:Configurations>
+  <DTS:LogProviders>
+    <DTS:LogProvider
+      DTS:ConfigString="Config"
+      DTS:CreationName="Microsoft.LogProviderSQLServer"
+      DTS:Description="Writes log entries for events to a SQL Server database"
+      DTS:DTSID="{68C0B5EF-BA22-451F-B6E2-5DBF7CED3866}"
+      DTS:ObjectName="SSIS log provider for SQL Server">
+      <DTS:ObjectData>
+        <InnerObject />
+      </DTS:ObjectData>
+    </DTS:LogProvider>
+  </DTS:LogProviders>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{44C04846-A76F-47BC-B0E3-6BA487E18E31}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="BatchId">
+      <DTS:VariableValue
+        DTS:DataType="20">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{14BF677F-9FD5-49C8-A880-FB80559E2C98}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="LineageId">
+      <DTS:VariableValue
+        DTS:DataType="20">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{465D026B-062A-4794-984A-2AF92DEAF7AB}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="&quot;&lt;pair&gt;&#xA;  &lt;key&gt;Table&lt;/key&gt;&#xA;  &lt;value&gt;&quot; + @[System::PackageName]  + &quot;&lt;/value&gt;&#xA;&lt;/pair&gt;&#xA;&lt;pair&gt;&#xA;  &lt;key&gt;Description&lt;/key&gt;&#xA;  &lt;value&gt;Pulls data from our primary source table into &quot; + @[System::PackageName]   + &quot;&lt;/value&gt;&#xA;&lt;/pair&gt;&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="Yodil"
+      DTS:ObjectName="LineageMeta">
+      <DTS:VariableValue
+        DTS:DataType="8">&lt;pair&gt;
+  &lt;key&gt;Table&lt;/key&gt;
+  &lt;value&gt;Custom SrcToStg Billing Account ExtraData&lt;/value&gt;
+&lt;/pair&gt;
+&lt;pair&gt;
+  &lt;key&gt;Description&lt;/key&gt;
+  &lt;value&gt;Pulls data from our primary source table into Custom SrcToStg Billing Account ExtraData&lt;/value&gt;
+&lt;/pair&gt;</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{64DCD08E-9915-4C22-93EE-333653C540EC}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="SourceCode">
+      <DTS:VariableValue
+        DTS:DataType="8">DuckCreek</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{950B8855-8A74-466B-9FBD-F27ADE5DD21C}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_ConfigDataSource">
+      <DTS:VariableValue
+        DTS:DataType="8">Data Source=.;Initial Catalog=;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{5815FE63-5B75-4744-9A46-880EE6B4485D}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_CultureCode">
+      <DTS:VariableValue
+        DTS:DataType="8">en-US</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{4F4BD911-96B8-44AD-85C9-71F3F6784997}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_ParameterDate">
+      <DTS:VariableValue
+        DTS:DataType="7">1/1/1900</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{CC3ED63C-3EC1-49E6-8013-8F1FA5ADA702}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_RowCountIgnore">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{4349D6DB-D1B8-4E81-A9A0-CD0E35A4CA03}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_RowCountInsert">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{B91B8C27-8FE9-409D-8EBA-4D435ECBC8A3}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_RowCountSource">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{0B3E82DD-B90C-429E-87FB-1DA3D978E7F0}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_SourceBill">
+      <DTS:VariableValue
+        DTS:DataType="8">Data Source=.;Initial Catalog=Lawcover_DuckCreek_Consolidated;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{229E12C0-E4C2-46AA-ADB4-81BB2793B1D3}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_SourceLookupBill">
+      <DTS:VariableValue
+        DTS:DataType="8">Data Source=.;Initial Catalog=Lawcover_DuckCreek_Consolidated;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{9DDC2945-1AA5-4157-8E7F-C1E2DCA73F3E}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="V_Target">
+      <DTS:VariableValue
+        DTS:DataType="8">Data Source=.;Initial Catalog=Lawcover_Staging_Billing;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=False;</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:LoggingOptions
+    DTS:FilterKind="0"
+    DTS:LoggingMode="1">
+    <DTS:Property
+      DTS:DataType="8"
+      DTS:Name="EventFilter">5,7,OnError,13,OnPostExecute,12,OnPreExecute,12,OnTaskFailed,9,OnWarning</DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnError"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnPostExecute"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnPreExecute"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnQueryCancel"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnTaskFailed"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:Property
+      DTS:EventName="OnWarning"
+      DTS:Name="ColumnFilter">
+      <DTS:Property
+        DTS:Name="Computer">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="Operator">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceName">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="SourceID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="ExecutionID">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="MessageText">-1</DTS:Property>
+      <DTS:Property
+        DTS:Name="DataBytes">-1</DTS:Property>
+    </DTS:Property>
+    <DTS:SelectedLogProviders>
+      <DTS:SelectedLogProvider
+        DTS:InstanceID="{68C0B5EF-BA22-451F-B6E2-5DBF7CED3866}" />
+    </DTS:SelectedLogProviders>
+  </DTS:LoggingOptions>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\DFT - AccountExtraData"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:DelayValidation="True"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{714E9559-4D66-4838-B9A9-F5E486639500}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DFT - AccountExtraData"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0"
+        DTS:LoggingMode="1">
+        <DTS:Property
+          DTS:DataType="8"
+          DTS:Name="EventFilter">2,7,OnError,9,OnWarning</DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnError"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnTaskFailed"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnWarning"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:SelectedLogProviders>
+          <DTS:SelectedLogProvider
+            DTS:InstanceID="{68C0B5EF-BA22-451F-B6E2-5DBF7CED3866}" />
+        </DTS:SelectedLogProviders>
+      </DTS:LoggingOptions>
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\DFT - AccountExtraData\AccountExtraData"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="AccountExtraData"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Custom].[AccountExtraData]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT - AccountExtraData\AccountExtraData.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[StageBilling]"
+                  connectionManagerRefId="Package.ConnectionManagers[StageBilling]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[LoadDate]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="LoadDate"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LoadDate]"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output].Columns[LoadDate]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[LineageId]"
+                      cachedDataType="i8"
+                      cachedName="LineageId"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LineageId]"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output].Columns[LineageId]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[Accountkey]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Accountkey"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountKey]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[Accountkey]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[AccountNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="AccountNumber"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountNumber]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[AccountNumber]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[EffectiveDate]"
+                      cachedDataType="dbTimeStamp2"
+                      cachedName="EffectiveDate"
+                      cachedScale="7"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[EffectiveDate]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[EffectiveDate]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[ExpirationDate]"
+                      cachedDataType="dbTimeStamp2"
+                      cachedName="ExpirationDate"
+                      cachedScale="7"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ExpirationDate]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ExpirationDate]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[DeletedId]"
+                      cachedDataType="wstr"
+                      cachedLength="1"
+                      cachedName="DeletedId"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[DeletedInd]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[DeletedId]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[AccountStartDate]"
+                      cachedDataType="dbTimeStamp2"
+                      cachedName="AccountStartDate"
+                      cachedScale="7"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                      lineageId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Match Output].Columns[AccountStartDate]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[ColumnName]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="ColumnName"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnName]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ColumnName]" />
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].Columns[ColumnValue]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="ColumnValue"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnValue]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ColumnValue]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LoadDate]"
+                      dataType="dbTimeStamp2"
+                      name="LoadDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[LineageId]"
+                      dataType="i8"
+                      name="LineageId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[BusinessKeyHash]"
+                      dataType="bytes"
+                      length="32"
+                      name="BusinessKeyHash" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ContentHash]"
+                      dataType="bytes"
+                      length="32"
+                      name="ContentHash" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountKey]"
+                      dataType="wstr"
+                      length="100"
+                      name="AccountKey" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[AccountNumber]"
+                      dataType="wstr"
+                      length="50"
+                      name="AccountNumber" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                      dataType="dbTimeStamp2"
+                      name="StartDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[EffectiveDate]"
+                      dataType="dbTimeStamp2"
+                      name="EffectiveDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ExpirationDate]"
+                      dataType="dbTimeStamp2"
+                      name="ExpirationDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[DeletedInd]"
+                      dataType="wstr"
+                      length="1"
+                      name="DeletedInd" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnName]"
+                      dataType="wstr"
+                      length="100"
+                      name="ColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input].ExternalColumns[ColumnValue]"
+                      dataType="wstr"
+                      length="100"
+                      name="ColumnValue" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\AccountExtraData.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\AccountExtraData.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - AccountExtraData\AccountSource"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="AccountSource"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT (CAST (AccountId as nvarchar(50)) ) AS Accountkey
+	 , CAST(RTRIM(LTRIM(AccountReference)) as  nvarchar(50))   AccountNumber
+	 , CAST (CreationDate as datetime2(7))EffectiveDate
+	 , CAST (NULL as datetime2(7)) ExpirationDate
+	 , CAST ('N' AS nchar(1)) DeletedId
+	 ,SUBSTRING(T2.X.value('local-name(.)', 'sysname'),0,99) as ColumnName
+     ,T2.X.value('.', 'nvarchar(100)') as ColumnValue
+from DC_BIL_Account as e
+  cross apply e.AccountExtendedData.nodes('*/*[position() &gt; 0]') as T2(X)</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping">"Parameter0:Input",{4F4BD911-96B8-44AD-85C9-71F3F6784997};</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT - AccountExtraData\AccountSource.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SourceBill]"
+                  connectionManagerRefId="Package.ConnectionManagers[SourceBill]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[AccountNumber]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[AccountNumber]"
+                      length="50"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[AccountNumber]"
+                      name="AccountNumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[EffectiveDate]"
+                      dataType="dbTimeStamp2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[EffectiveDate]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[EffectiveDate]"
+                      name="EffectiveDate"
+                      scale="7"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ExpirationDate]"
+                      dataType="dbTimeStamp2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[ExpirationDate]"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ExpirationDate]"
+                      name="ExpirationDate"
+                      scale="7"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[DeletedId]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[DeletedId]"
+                      length="1"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[DeletedId]"
+                      name="DeletedId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[Accountkey]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[Accountkey]"
+                      length="50"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[Accountkey]"
+                      name="Accountkey"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ColumnName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[ColumnName]"
+                      length="100"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ColumnName]"
+                      name="ColumnName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ColumnValue]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[ColumnValue]"
+                      length="100"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[ColumnValue]"
+                      name="ColumnValue"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[AccountNumber]"
+                      dataType="wstr"
+                      length="50"
+                      name="AccountNumber" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[EffectiveDate]"
+                      dataType="dbTimeStamp2"
+                      name="EffectiveDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[ExpirationDate]"
+                      dataType="dbTimeStamp2"
+                      name="ExpirationDate"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[DeletedId]"
+                      dataType="wstr"
+                      length="1"
+                      name="DeletedId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[Accountkey]"
+                      dataType="wstr"
+                      length="50"
+                      name="Accountkey" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[ColumnName]"
+                      dataType="wstr"
+                      length="99"
+                      name="ColumnName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].ExternalColumns[ColumnValue]"
+                      dataType="wstr"
+                      length="100"
+                      name="ColumnValue" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[AccountNumber]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[AccountNumber]"
+                      name="AccountNumber" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[EffectiveDate]"
+                      dataType="dbTimeStamp2"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[EffectiveDate]"
+                      name="EffectiveDate"
+                      scale="7" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ExpirationDate]"
+                      dataType="dbTimeStamp2"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ExpirationDate]"
+                      name="ExpirationDate"
+                      scale="7" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ColumnName]"
+                      dataType="wstr"
+                      length="99"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ColumnName]"
+                      name="ColumnName" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ColumnValue]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[ColumnValue]"
+                      name="ColumnValue" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[DeletedId]"
+                      dataType="wstr"
+                      length="1"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[DeletedId]"
+                      name="DeletedId" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[Accountkey]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Error Output].Columns[Accountkey]"
+                      name="Accountkey" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - AccountExtraData\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\DFT - AccountExtraData\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output].Columns[LineageId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output].Columns[LineageId]"
+                      name="LineageId"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">@[User::LineageId]</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">@[User::LineageId]</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output].Columns[LoadDate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output].Columns[LoadDate]"
+                      name="LoadDate"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - AccountExtraData\Derived Column-Config"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column-Config"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\DFT - AccountExtraData\Derived Column-Config.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\Derived Column-Config.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Output].Columns[CultureCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      length="5"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Output].Columns[CultureCode]"
+                      name="CultureCode"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">@[User::V_CultureCode]</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">@[User::V_CultureCode]</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\Derived Column-Config.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - AccountExtraData\LKP BillingCore"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="LKP BillingCore"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select distinct AccountKey, AccountStartDate from Control.BillingCore</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select distinct AccountKey, AccountStartDate from Control.BillingCore) [refTable]
+where [refTable].[AccountKey] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="AccountKey" dataType="DT_WSTR" length="100" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="AccountStartDate" dataType="DT_DBTIMESTAMP2" length="0" precision="0" scale="7" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[Accountkey]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT - AccountExtraData\LKP BillingCore.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[StageBilling]"
+                  connectionManagerRefId="Package.ConnectionManagers[StageBilling]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\DFT - AccountExtraData\LKP BillingCore.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT - AccountExtraData\LKP BillingCore.Inputs[Lookup Input].Columns[Accountkey]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="Accountkey"
+                      lineageId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output].Columns[Accountkey]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">AccountKey</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\LKP BillingCore.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Match Output].Columns[AccountStartDate]"
+                      dataType="dbTimeStamp2"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Match Output].Columns[AccountStartDate]"
+                      name="AccountStartDate"
+                      scale="7"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">AccountStartDate</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\LKP BillingCore.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\DFT - AccountExtraData\LKP BillingCore.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - AccountExtraData\Row Count"
+              componentClassID="Microsoft.RowCount"
+              contactInfo="Row Count;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Counts rows as they pass through a data flow. For example, use the number of rows processed to determine whether or not to perform cleanup operations, or update text in an e-mail message to communicate processing status."
+              name="Row Count">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable to hold the row count."
+                  name="VariableName">User::V_RowCountIgnore</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\DFT - AccountExtraData\Row Count.Inputs[Row Count Input 1]"
+                  hasSideEffects="true"
+                  name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\Row Count.Outputs[Row Count Output 1]"
+                  name="Row Count Output 1"
+                  synchronousInputId="Package\DFT - AccountExtraData\Row Count.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - AccountExtraData\Row Count- Source"
+              componentClassID="Microsoft.RowCount"
+              contactInfo="Row Count;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Counts rows as they pass through a data flow. For example, use the number of rows processed to determine whether or not to perform cleanup operations, or update text in an e-mail message to communicate processing status."
+              localeId="1033"
+              name="Row Count- Source">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable to hold the row count."
+                  name="VariableName">User::V_RowCountSource</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\DFT - AccountExtraData\Row Count- Source.Inputs[Row Count Input 1]"
+                  hasSideEffects="true"
+                  name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\Row Count- Source.Outputs[Row Count Output 1]"
+                  name="Row Count Output 1"
+                  synchronousInputId="Package\DFT - AccountExtraData\Row Count- Source.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - AccountExtraData\Row Count- StageBilling"
+              componentClassID="Microsoft.RowCount"
+              contactInfo="Row Count;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Counts rows as they pass through a data flow. For example, use the number of rows processed to determine whether or not to perform cleanup operations, or update text in an e-mail message to communicate processing status."
+              name="Row Count- StageBilling">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable to hold the row count."
+                  name="VariableName">User::V_RowCountInsert</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\DFT - AccountExtraData\Row Count- StageBilling.Inputs[Row Count Input 1]"
+                  hasSideEffects="true"
+                  name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - AccountExtraData\Row Count- StageBilling.Outputs[Row Count Output 1]"
+                  name="Row Count Output 1"
+                  synchronousInputId="Package\DFT - AccountExtraData\Row Count- StageBilling.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\DFT - AccountExtraData.Paths[Derived Column Output]"
+              endId="Package\DFT - AccountExtraData\Row Count- StageBilling.Inputs[Row Count Input 1]"
+              name="Derived Column Output"
+              startId="Package\DFT - AccountExtraData\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\DFT - AccountExtraData.Paths[Derived Column Output1]"
+              endId="Package\DFT - AccountExtraData\Derived Column.Inputs[Derived Column Input]"
+              name="Derived Column Output"
+              startId="Package\DFT - AccountExtraData\Derived Column-Config.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\DFT - AccountExtraData.Paths[Lookup Match Output]"
+              endId="Package\DFT - AccountExtraData\Row Count- Source.Inputs[Row Count Input 1]"
+              name="Lookup Match Output"
+              startId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\DFT - AccountExtraData.Paths[Lookup No Match Output]"
+              endId="Package\DFT - AccountExtraData\Row Count.Inputs[Row Count Input 1]"
+              name="Lookup No Match Output"
+              startId="Package\DFT - AccountExtraData\LKP BillingCore.Outputs[Lookup No Match Output]" />
+            <path
+              refId="Package\DFT - AccountExtraData.Paths[OLE DB Source Output]"
+              endId="Package\DFT - AccountExtraData\LKP BillingCore.Inputs[Lookup Input]"
+              name="OLE DB Source Output"
+              startId="Package\DFT - AccountExtraData\AccountSource.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\DFT - AccountExtraData.Paths[Row Count Output 1]"
+              endId="Package\DFT - AccountExtraData\AccountExtraData.Inputs[OLE DB Destination Input]"
+              name="Row Count Output 1"
+              startId="Package\DFT - AccountExtraData\Row Count- StageBilling.Outputs[Row Count Output 1]" />
+            <path
+              refId="Package\DFT - AccountExtraData.Paths[Row Count Output 11]"
+              endId="Package\DFT - AccountExtraData\Derived Column-Config.Inputs[Derived Column Input]"
+              name="Row Count Output 1"
+              startId="Package\DFT - AccountExtraData\Row Count- Source.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Get ConnStr"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{B4CC74CA-A4C9-4650-BC97-6177988BFC4B}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Get ConnStr"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0"
+        DTS:LoggingMode="1">
+        <DTS:Property
+          DTS:DataType="8"
+          DTS:Name="EventFilter">1,7,OnError</DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnError"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnTaskFailed"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnWarning"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:SelectedLogProviders>
+          <DTS:SelectedLogProvider
+            DTS:InstanceID="{68C0B5EF-BA22-451F-B6E2-5DBF7CED3866}" />
+        </DTS:SelectedLogProviders>
+      </DTS:LoggingOptions>
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{7A89E44C-1FEF-4162-8716-B94798BB0715}"
+          SQLTask:SqlStatementSource="IF  EXISTS (SELECT * &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;FROM sys.certificates &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;WHERE name = 'DCTInsightsCertificate')&#xA;IF  EXISTS (SELECT * &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;FROM sys.symmetric_keys &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;WHERE name = 'DCTInsightsSymmetricKey'&#xA;&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;)&#xA;&#xA;Begin&#xA;       OPEN SYMMETRIC KEY DCTInsightsSymmetricKey &#xA;       DECRYPTION BY CERTIFICATE DCTInsightsCertificate;&#xA;END&#xA;&#xA;--OPEN SYMMETRIC KEY DCTInsightsSymmetricKey &#xA;--DECRYPTION BY CERTIFICATE DCTInsightsCertificate;&#xA;  SELECT&#xA;SourceBillConn= MAX(CASE WHEN ConnectionName='SourceBill' and nullif(rtrim(ltrim(UserId)),'')is   null    THEN CONCAT('Data Source=',[DataSourceName],';Initial Catalog=',CatalogName, ';Provider=',ProviderName,';Integrated Security=SSPI;Auto Translate=False;')&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;ELSE Case  WHEN (ConnectionName='SourceBill' and len(rtrim(ltrim(UserId)))  &gt; 1 ) THEN&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; CONCAT('Data Source=',[DataSourceName],';Initial Catalog=',CatalogName,';Provider=',ProviderName,';Persist Security Info=True;Password=',CONVERT(varchar(100), DecryptByKey(PasswordText)),';User ID=',CONVERT(varchar(50), DecryptByKey(UserId)),';Auto Translate=False;') &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; end END ),&#xA;SourceLookupBill=MAX(CASE WHEN ConnectionName='SourceLookupBill'and nullif(rtrim(ltrim(UserId)),'')is   null    THEN CONCAT('Data Source=',[DataSourceName],';Initial Catalog=',CatalogName, ';Provider=',ProviderName,';Integrated Security=SSPI;Auto Translate=False;')&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;ELSE Case  WHEN (ConnectionName='SourceLookupBill' and len(rtrim(ltrim(UserId)))  &gt; 1 ) THEN&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; CONCAT('Data Source=',[DataSourceName],';Initial Catalog=',CatalogName,';Provider=',ProviderName,';Persist Security Info=True;Password=',CONVERT(varchar(100), DecryptByKey(PasswordText)),';User ID=',CONVERT(varchar(50), DecryptByKey(UserId)),';Auto Translate=False;') &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; end END ),&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; &#xA;TargetConn=MAX(CASE WHEN ConnectionName='StageBilling' and nullif(rtrim(ltrim(UserId)),'')is   null    THEN CONCAT('Data Source=',[DataSourceName],';Initial Catalog=',CatalogName, ';Provider=',ProviderName,';Integrated Security=SSPI;Auto Translate=False;')&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;ELSE Case  WHEN (ConnectionName='StageBilling' and len(rtrim(ltrim(UserId)))  &gt; 1 ) THEN&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; CONCAT('Data Source=',[DataSourceName],';Initial Catalog=',CatalogName,';Provider=',ProviderName,';Persist Security Info=True;Password=',CONVERT(varchar(100), DecryptByKey(PasswordText)),';User ID=',CONVERT(varchar(50), DecryptByKey(UserId)),';Auto Translate=False;') &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9; end END )&#xA;FROM [Duck].[ConnectString]&#xA;WHERE ConnectionName IN ('SourceBill','SourceLookupBill','StageBilling')&#xA;&#xA;&#xA;IF  EXISTS (SELECT * &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;FROM sys.symmetric_keys &#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;WHERE name = 'DCTInsightsSymmetricKey'&#xA;&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;)&#xA;Begin&#xA;&#xA;CLOSE SYMMETRIC KEY DCTInsightsSymmetricKey&#xA;&#xA;End&#xA;&#xA;&#xA;&#xA;/*SELECT&#xA;MAX(CASE WHEN ConnectionName='SourceBill' THEN CONCAT('Data Source=',[DataSourceName],';Initial Catalog=', [CatalogName], ';Provider=',ProviderName,';Integrated Security=SSPI;Auto Translate=False;') END ) AS SourceBillConn,&#xA;MAX(CASE WHEN ConnectionName='SourceLookupBill' THEN CONCAT('Data Source=',[DataSourceName],';Initial Catalog=', [CatalogName], ';Provider=',ProviderName,';Integrated Security=SSPI;Auto Translate=False;') END ) AS SourceLookupBillConn,&#xA;MAX(CASE WHEN ConnectionName='StageBilling' THEN CONCAT('Data Source=',[DataSourceName],';Initial Catalog=', [CatalogName], ';Provider=',ProviderName,';Integrated Security=SSPI;Auto Translate=False;') END ) AS TargetConn&#xA;FROM [Duck].[ConnectString]&#xA;WHERE ConnectionName IN ('SourceBill','SourceLookupBill','StageBilling')&#xA;*/"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="0"
+            SQLTask:DtsVariableName="User::V_SourceBill" />
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="1"
+            SQLTask:DtsVariableName="User::V_SourceLookupBill" />
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="2"
+            SQLTask:DtsVariableName="User::V_Target" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SQL - End Process"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{884FDDED-76BC-4312-ADB7-6ECBA0B3B07F}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SQL - End Process"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0"
+        DTS:LoggingMode="1">
+        <DTS:Property
+          DTS:DataType="8"
+          DTS:Name="EventFilter">1,7,OnError</DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnError"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnTaskFailed"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnWarning"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:SelectedLogProviders>
+          <DTS:SelectedLogProvider
+            DTS:InstanceID="{68C0B5EF-BA22-451F-B6E2-5DBF7CED3866}" />
+        </DTS:SelectedLogProviders>
+      </DTS:LoggingOptions>
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{7A89E44C-1FEF-4162-8716-B94798BB0715}"
+          SQLTask:SqlStatementSource="EXEC Duck.EndProcess ?,?,?,?,?,?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@LineageId"
+            SQLTask:DtsVariableName="User::LineageId"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="3"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@BatchId"
+            SQLTask:DtsVariableName="User::BatchId"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="3"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@EtlPackageName"
+            SQLTask:DtsVariableName="System::PackageName"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="130"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@RecordSourceCount"
+            SQLTask:DtsVariableName="User::V_RowCountSource"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="3"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@RecordInsertCount"
+            SQLTask:DtsVariableName="User::V_RowCountInsert"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="3"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="@RecordIgnoreCount"
+            SQLTask:DtsVariableName="User::V_RowCountIgnore"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="3"
+            SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SQL - Start Process"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{8ACA5550-AB8B-434B-B70A-3429FE2BF12F}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SQL - Start Process"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:LoggingOptions
+        DTS:FilterKind="0"
+        DTS:LoggingMode="1">
+        <DTS:Property
+          DTS:DataType="8"
+          DTS:Name="EventFilter">1,7,OnError</DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnError"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnTaskFailed"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:Property
+          DTS:EventName="OnWarning"
+          DTS:Name="ColumnFilter">
+          <DTS:Property
+            DTS:Name="Computer">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="Operator">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceName">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="SourceID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="ExecutionID">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="MessageText">-1</DTS:Property>
+          <DTS:Property
+            DTS:Name="DataBytes">-1</DTS:Property>
+        </DTS:Property>
+        <DTS:SelectedLogProviders>
+          <DTS:SelectedLogProvider
+            DTS:InstanceID="{68C0B5EF-BA22-451F-B6E2-5DBF7CED3866}" />
+        </DTS:SelectedLogProviders>
+      </DTS:LoggingOptions>
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{7A89E44C-1FEF-4162-8716-B94798BB0715}"
+          SQLTask:SqlStatementSource="EXEC Duck.InitiateProcess ?,?,?,?,?,?,?,?,?,0,'StageBilling',?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="0"
+            SQLTask:DtsVariableName="User::BatchId"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="20"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="1"
+            SQLTask:DtsVariableName="System::PackageName"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="130"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="2"
+            SQLTask:DtsVariableName="System::ProductVersion"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="130"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="3"
+            SQLTask:DtsVariableName="System::VersionMajor"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="131"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="4"
+            SQLTask:DtsVariableName="System::VersionMinor"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="131"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="5"
+            SQLTask:DtsVariableName="System::VersionBuild"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="131"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="6"
+            SQLTask:DtsVariableName="User::SourceCode"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="130"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="7"
+            SQLTask:DtsVariableName="System::ExecutionInstanceGUID"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="130"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="8"
+            SQLTask:DtsVariableName="User::LineageId"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="20"
+            SQLTask:ParameterSize="-1" />
+          <SQLTask:ParameterBinding
+            SQLTask:ParameterName="9"
+            SQLTask:DtsVariableName="System::MachineName"
+            SQLTask:ParameterDirection="Input"
+            SQLTask:DataType="130"
+            SQLTask:ParameterSize="-1" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate AccountExtraData"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{712D6DB8-C113-4E4A-909C-F60ABB68F8CE}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate AccountExtraData"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019 CTP2.3; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{EA2670E3-7B9D-449B-B7EF-73338DF7FA74}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE Custom.AccountExtraData" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{18907101-C4BE-4974-9DC8-62C64D601B46}"
+      DTS:From="Package\DFT - AccountExtraData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\SQL - End Process" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{6CC31506-5878-4AA8-8C9E-EBA8366D60C5}"
+      DTS:From="Package\SQL - Start Process"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Get ConnStr" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{214FCEA1-7816-45C6-BEBF-D1D1D503F11B}"
+      DTS:From="Package\Get ConnStr"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Truncate AccountExtraData" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{75C0DAA5-E890-436B-B6D7-DDE3CE20E43C}"
+      DTS:From="Package\Truncate AccountExtraData"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\DFT - AccountExtraData" />
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler
+      DTS:refId="Package.EventHandlers[OnError]"
+      DTS:CreationName="OnError"
+      DTS:DTSID="{5560BC25-35FC-4FD8-A145-83D691ACB6B6}"
+      DTS:EventID="481824616"
+      DTS:EventName="OnError"
+      DTS:LocaleID="-1">
+      <DTS:Variables>
+        <DTS:Variable
+          DTS:CreationName=""
+          DTS:Description="The propagate property of the event"
+          DTS:DTSID="{476C9669-6DBF-4C8C-BCD0-9E4852AB4C0E}"
+          DTS:IncludeInDebugDump="6789"
+          DTS:Namespace="System"
+          DTS:ObjectName="Propagate">
+          <DTS:VariableValue
+            DTS:DataType="11">-1</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+      <DTS:Executables />
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="191.2,41.6"
+          Id="Package\DFT - AccountExtraData"
+          TopLeft="37.6333325650957,230.193333504147" />
+        <NodeLayout
+          Size="136,41.6"
+          Id="Package\Get ConnStr"
+          TopLeft="35.3666661633386,75.2066664132012" />
+        <NodeLayout
+          Size="167.2,41.6"
+          Id="Package\SQL - End Process"
+          TopLeft="43.0999985694886,334.566666859521" />
+        <NodeLayout
+          Size="170.4,41.6"
+          Id="Package\SQL - Start Process"
+          TopLeft="5.5,5.49999999999995" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="129.966665567292,271.793333504147">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,62.7733333553738"
+              Start="0,0"
+              End="0,55.2733333553738">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,55.2733333553738" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="90.7,47.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="12.6666661633385,28.1066664132013"
+              Start="0,0"
+              End="12.6666661633385,20.6066664132013">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,10.0533332066006" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,10.0533332066006"
+                    Point2="0,14.0533332066006"
+                    Point3="4,14.0533332066006" />
+                  <mssgle:LineSegment
+                    End="8.66666616333855,14.0533332066006" />
+                  <mssgle:CubicBezierSegment
+                    Point1="8.66666616333855,14.0533332066006"
+                    Point2="12.6666661633385,14.0533332066006"
+                    Point3="12.6666661633385,18.0533332066006" />
+                  <mssgle:LineSegment
+                    End="12.6666661633385,20.6066664132013" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="206.4,41.6"
+          Id="Package\Truncate AccountExtraData"
+          TopLeft="41.99999833107,156.000001239777" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="103.366666163339,116.806666413201">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="41.8333321677315,39.1933348265754"
+              Start="0,0"
+              End="41.8333321677315,31.6933348265754">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,15.5966674132877" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,15.5966674132877"
+                    Point2="0,19.5966674132877"
+                    Point3="4,19.5966674132877" />
+                  <mssgle:LineSegment
+                    End="37.8333321677315,19.5966674132877" />
+                  <mssgle:CubicBezierSegment
+                    Point1="37.8333321677315,19.5966674132877"
+                    Point2="41.8333321677315,19.5966674132877"
+                    Point3="41.8333321677315,23.5966674132877" />
+                  <mssgle:LineSegment
+                    End="41.8333321677315,31.6933348265754" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="145.19999833107,197.600001239777">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-11.9666657659743,32.5933322643703"
+              Start="0,0"
+              End="-11.9666657659743,25.0933322643703">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,12.2966661321852" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,12.2966661321852"
+                    Point2="0,16.2966661321852"
+                    Point3="-4,16.2966661321852" />
+                  <mssgle:LineSegment
+                    End="-7.96666576597428,16.2966661321852" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-7.96666576597428,16.2966661321852"
+                    Point2="-11.9666657659743,16.2966661321852"
+                    Point3="-11.9666657659743,20.2966661321852" />
+                  <mssgle:LineSegment
+                    End="-11.9666657659743,25.0933322643703" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <DtsEventHandler
+    design-time-name="Package.EventHandlers[OnError]">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="134,42"
+          Id="{3FC3BAD7-1A27-4E8B-BEFB-9A0564E47DA4}"
+          TopLeft="60,60" />
+      </GraphLayout>
+    </LayoutInfo>
+  </DtsEventHandler>
+  <TaskHost
+    design-time-name="Package\DFT - AccountExtraData">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="148.8,41.6"
+          Id="Package\DFT - AccountExtraData\LKP BillingCore"
+          TopLeft="205.9,107.1" />
+        <NodeLayout
+          Size="129.6,41.6"
+          Id="Package\DFT - AccountExtraData\Row Count"
+          TopLeft="5.50000000000007,208.7" />
+        <NodeLayout
+          Size="163.2,41.6"
+          Id="Package\DFT - AccountExtraData\Row Count- StageBilling"
+          TopLeft="198.7,513.5" />
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\DFT - AccountExtraData\Derived Column"
+          TopLeft="203.9,411.9" />
+        <NodeLayout
+          Size="169.6,41.6"
+          Id="Package\DFT - AccountExtraData\Row Count- Source"
+          TopLeft="195.5,208.7" />
+        <NodeLayout
+          Size="148.8,41.6"
+          Id="Package\DFT - AccountExtraData\AccountSource"
+          TopLeft="205.9,5.49999999999995" />
+        <NodeLayout
+          Size="188,41.6"
+          Id="Package\DFT - AccountExtraData\Derived Column-Config"
+          TopLeft="186.3,310.3" />
+        <NodeLayout
+          Size="162.4,41.6"
+          Id="Package\DFT - AccountExtraData\AccountExtraData"
+          TopLeft="199.1,615.099999999999" />
+        <EdgeLayout
+          Id="Package\DFT - AccountExtraData.Paths[Derived Column Output]"
+          TopLeft="280.3,453.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\DFT - AccountExtraData.Paths[Row Count Output 11]"
+          TopLeft="280.3,250.3">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\DFT - AccountExtraData.Paths[Row Count Output 1]"
+          TopLeft="280.3,555.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\DFT - AccountExtraData.Paths[OLE DB Source Output]"
+          TopLeft="280.3,47.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\DFT - AccountExtraData.Paths[Lookup No Match Output]"
+          TopLeft="256.833333333333,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-186.533333333333,59.9999999999999"
+              Start="0,0"
+              End="-186.533333333333,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.3829787234042" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.3829787234042"
+                    Point2="0,24.3829787234042"
+                    Point3="-4,24.3829787234042" />
+                  <mssgle:LineSegment
+                    End="-182.533333333333,24.3829787234042" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-182.533333333333,24.3829787234042"
+                    Point2="-186.533333333333,24.3829787234042"
+                    Point3="-186.533333333333,28.3829787234042" />
+                  <mssgle:LineSegment
+                    End="-186.533333333333,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-149.073053385417,29.3829787234042,111.6127734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\DFT - AccountExtraData.Paths[Lookup Match Output]"
+          TopLeft="303.766666666667,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-23.4666666666667,59.9999999999999"
+              Start="0,0"
+              End="-23.4666666666667,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.3829787234042" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.3829787234042"
+                    Point2="0,24.3829787234042"
+                    Point3="-4,24.3829787234042" />
+                  <mssgle:LineSegment
+                    End="-19.4666666666667,24.3829787234042" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-19.4666666666667,24.3829787234042"
+                    Point2="-23.4666666666667,24.3829787234042"
+                    Point3="-23.4666666666667,28.3829787234042" />
+                  <mssgle:LineSegment
+                    End="-23.4666666666667,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-59.9247200520834,29.3829787234042,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\DFT - AccountExtraData.Paths[Derived Column Output1]"
+          TopLeft="280.3,351.9">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\DFT - AccountExtraData\LKP BillingCore">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string"></Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\DFT - AccountExtraData\AccountSource">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\DFT - AccountExtraData\AccountExtraData">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
